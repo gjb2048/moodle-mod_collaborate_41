@@ -83,9 +83,9 @@ function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_for
     $collaborate->timecreated = time();
 
     // Add new instance with dummy data for the editor fields.
-    $collaborate->instructionsa ='a';
+    $collaborate->instructionsa = 'a';
     $collaborate->instructionsaformat = FORMAT_HTML;
-    $collaborate->instructionsb ='b';
+    $collaborate->instructionsb = 'b';
     $collaborate->instructionsbformat = FORMAT_HTML;
 
     return collaborate_editor::update_editor_instance_helper($collaborate, $mform, true);
@@ -442,7 +442,15 @@ function collaborate_pluginfile($course, $cm, $context, $filearea, array $args, 
 
     require_login($course, true, $cm);
 
-    send_file_not_found();
+    $fs = get_file_storage();
+    $relativepath = implode('/', $args);
+    $fullpath = "/$context->id/mod_collaborate/$filearea/$relativepath";
+    if (!($file = $fs->get_file_by_hash(sha1($fullpath))) || $file->is_directory()) {
+        return send_file_not_found();
+    }
+
+    // Send the file.
+    send_stored_file($file, 0, 0, $forcedownload, $options);
 }
 
 /* Navigation API */
