@@ -26,6 +26,7 @@
  *
  * @package    mod_collaborate
  * @copyright  2019 Richard Jones richardnz@outlook.com
+ * @copyright  2022 G J Barnard - {@link http://moodle.org/user/profile.php?id=442195}.
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @see https://github.com/moodlehq/moodle-mod_simplemod
  * @see https://github.com/justinhunt/moodle-mod_simplemod*/
@@ -37,5 +38,45 @@
  * @return bool
  */
 function xmldb_collaborate_upgrade($oldversion) {
+    global $DB;
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2022120404) {
+
+        $table = new xmldb_table('collaborate');
+
+        // Define fields instructionsa, instructionsaformat, instructionsb and instructionsbformat to be added to collaborate.
+        $field = new xmldb_field('instructionsa', XMLDB_TYPE_TEXT, null, null, null, null, null, 'title');
+
+        // Conditionally launch add field instructionsa.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('instructionsaformat', XMLDB_TYPE_INTEGER, '4', null, null, null, '0', 'instructionsa');
+
+        // Conditionally launch add field instructionsaformat.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('instructionsb', XMLDB_TYPE_TEXT, null, null, null, null, null, 'instructionsaformat');
+
+        // Conditionally launch add field instructionsb.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $field = new xmldb_field('instructionsbformat', XMLDB_TYPE_INTEGER, '4', null, null, null, '0', 'instructionsb');
+
+        // Conditionally launch add field instructionsbformat.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Collaborate savepoint reached.
+        upgrade_mod_savepoint(true, 2022120404, 'collaborate');
+    }
+
     return true;
 }
