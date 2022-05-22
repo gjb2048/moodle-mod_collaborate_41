@@ -86,4 +86,27 @@ class mod_collaborate_mod_form extends moodleform_mod {
         // Add standard buttons, common to all modules.
         $this->add_action_buttons();
     }
+
+    // Standard Moodle function for editor area preprocessing.
+    public function data_preprocessing(&$defaultvalues) {
+
+        if ($this->current->instance) {
+            $context = $this->context;
+            $options = collaborate_editor::get_editor_options($context);
+            $names = collaborate_editor::get_editor_names();
+
+            foreach ($names as $name) {
+                $defaultvalues = (object) $defaultvalues;
+                $defaultvalues = file_prepare_standard_editor(
+                    $defaultvalues,
+                    $name,
+                    $options,
+                    $context,
+                    'mod_collaborate',
+                    $name,
+                    $defaultvalues->id
+                );
+            }
+        }
+    }
 }
