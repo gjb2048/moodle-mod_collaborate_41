@@ -30,12 +30,14 @@
     * heading String a page heading.
     * headers String array the table headers
     * submissions array of student submission records
+    * url_export String URL of the export link
 
     Example context (json):
     {
          "heading": "My heading",
          "headers": "[heading1, heading2, ...]",
-         "submissions": "[record1], [record2], ..."
+         "submissions": "[record1], [record2], ...",
+         "url_export": "https://mymoodlesite/mod/collaborate/export.php?cid=1"
     }
 }}
 <div class = "container">
@@ -70,5 +72,6 @@
                 </tbody>
             </table>
        </div>
+       <a href="{{url_export}}">{{# str }} exportlink, mod_collaborate {{/ str }}</a>
     </div>
 </div>
