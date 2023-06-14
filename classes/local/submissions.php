@@ -48,7 +48,7 @@ class submissions {
         } else {
             // Insert a dummy record and get the id.
             $data->timecreated = time();
-            $data->timemodified = 0;
+            $data->timemodified = $data->timecreated;
             $data->collaborateid = $cid;
             $data->userid = $USER->id;
             $data->page = $page;
