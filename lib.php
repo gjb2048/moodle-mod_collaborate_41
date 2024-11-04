@@ -88,10 +88,12 @@ function collaborate_add_instance(stdClass $collaborate, mod_collaborate_mod_for
     $collaborate->instructionsb = 'b';
     $collaborate->instructionsbformat = FORMAT_HTML;
 
+    $collaborate->id = collaborate_editor::update_editor_instance_helper($collaborate, $mform, true);
+
     // Update gradebook.
     collaborate_grade_item_update($collaborate);
 
-    return collaborate_editor::update_editor_instance_helper($collaborate, $mform, true);
+    return $collaborate->id;
 }
 
 /**
